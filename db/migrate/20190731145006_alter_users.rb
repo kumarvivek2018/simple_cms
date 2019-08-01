@@ -1,0 +1,27 @@
+class AlterUsers < ActiveRecord::Migration[5.2]
+  def up
+    rename_table('users', 'admin_users')
+
+    #after won't work in all db (ingored)
+    add_column('admin_users', 'username', :string, limit: 25, after: 'email')
+
+    change_column('admin_users', 'email', :string, limit: 100)
+
+    rename_column('admin_users', 'password', 'hashed_password')
+
+    puts "**** Adding an index ****"
+    add_index('admin_users', 'username')
+  end
+
+  def down
+    remove_index('admin_users', 'username')
+
+    rename_column('admin_users', 'hashed_password', 'password')
+
+    change_column('admin_users', 'email', :string, default: '', num: false)
+
+    remove_column('admin_users', 'username', :string, limit: 25, after: 'email')
+
+    rename_table('admin_users', 'users')
+  end
+end
