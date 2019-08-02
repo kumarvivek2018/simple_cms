@@ -1,4 +1,7 @@
 class CreateUsers < ActiveRecord::Migration[5.2]
+  self.drop_table("users")
+
+
   def up
     create_table :users do |t|
       #id will be by default added
@@ -15,7 +18,7 @@ class CreateUsers < ActiveRecord::Migration[5.2]
     end
 
     def down
-      drop_table('users')
+      drop_table(self.table_name)
     end
 
     #"def up" for adding cols to table. "def down" for reversing
